@@ -1,0 +1,13 @@
+---
+- name: Install xDebug
+  become: yes
+  shell: cd /home && wget -nc http://xdebug.org/files/xdebug-{{ xdebug.version }}.tgz && tar -xzf xdebug-{{ xdebug.version }}.tgz && cd xdebug-{{ xdebug.dest }}/ && phpize && ./configure --enable-xdebug && make && sudo cp modules/xdebug.so /usr/lib/.
+
+- name: Configure xDebug for php7.0-fpm
+  become: yes
+  shell: sudo echo 'zend_extension="/usr/lib/xdebug.so"' > /etc/php/7.0/fpm/conf.d/20-xdebug.ini && sudo echo 'xdebug.remote_enable=1' >> /etc/php/7.0/fpm/conf.d/20-xdebug.ini
+  notify: restart php7.0-fpm
+
+- name: Configure xDebug for php7.0-cli
+  become: yes
+  shell: sudo echo 'zend_extension="/usr/lib/xdebug.so"' > /etc/php/7.0/cli/conf.d/20-xdebug.ini && sudo echo 'xdebug.remote_enable=1' >> /etc/php/7.0/cli/conf.d/20-xdebug.ini

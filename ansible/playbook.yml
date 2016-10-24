@@ -1,0 +1,17 @@
+---
+- hosts: all
+  sudo: true
+  vars_files:
+    - vars/all.yml
+  roles:
+    - server
+    - server_host
+    - nginx
+    - mysql
+    - php
+    - xdebug
+    - composer
+#    - mongodb
+#    - redis
+#    - rabbitmq
+#    - elasticsearch

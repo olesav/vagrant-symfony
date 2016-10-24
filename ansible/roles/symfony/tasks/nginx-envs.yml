@@ -1,0 +1,7 @@
+---
+- name: Set env variables
+  lineinfile: dest=/etc/nginx/sites-available/default state=present
+              regexp='include fastcgi_params;$'
+              line='\tinclude fastcgi_params;\n\t{{ symfony.nginx_params }}'
+  notify:
+      - restart nginx

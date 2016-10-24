@@ -1,0 +1,7 @@
+---
+- name: Symfony
+  hosts: all
+  vars_files:
+    - vars/all.yml
+  roles:
+    - symfony

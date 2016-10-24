@@ -1,0 +1,31 @@
+---
+- include: php-fpm.yml
+- include: nginx-envs.yml
+
+- name: Move parameters.yml.vagrant.dist to parameters.yml
+  shell: cd {{symfony.projectroot}}/app/config && cp {{symfony.parameter_file}} parameters.yml
+  when: symfony.moveparams
+
+- name: Create tmp folder and Chown www-data for cache
+  become: yes
+  file: path={{symfony.tmp}} state=directory owner=www-data group=www-data mode=0777 recurse=yes
+
+- name: Composer install
+  shell: export {{symfony.env.cache}} && export {{symfony.env.logs}} && cd {{symfony.projectroot}} && if ! [ -d {{symfony.projectroot}}/vendor ]; then composer install --prefer-dist -n; fi
+  when: symfony.composerinstall
+
+- name: Clear cache
+  shell: export {{symfony.env.cache}} && export {{symfony.env.logs}} && cd {{symfony.projectroot}} && php {{symfony.console_dest}} cache:clear --env=dev
+  when: symfony.cacheclear
+
+- name: Run migrations
+  shell: export {{symfony.env.cache}} && export {{symfony.env.logs}} && cd {{symfony.projectroot}} && if grep -q "doctrine-migrations-bundle" composer.lock; then php {{symfony.console_dest}} doctrine:migrations:migrate -n; fi
+  when: symfony.migrations
+
+- name: Install assets
+  shell: export {{symfony.env.cache}} && export {{symfony.env.logs}} && cd {{symfony.projectroot}} && php {{symfony.console_dest}} assets:install --symlink --env=dev
+  when: symfony.assetsinstall
+
+- name: Dump assets
+  shell: export {{symfony.env.cache}} && export {{symfony.env.logs}} && cd {{symfony.projectroot}} && php {{symfony.console_dest}} assetic:dump --env=dev
+  when: symfony.assetsdump

@@ -1,0 +1,12 @@
+---
+- name: Set the hostname in /etc/hostname
+  shell: echo {{ server.hostname }} > /etc/hostname
+  when: server.hostname is defined
+
+- name: Set the hostname
+  shell: hostname {{ server.hostname }}
+  when: server.hostname is defined
+
+- name: Update /etc/hosts
+  lineinfile: dest=/etc/hosts regexp='^127\.0\.0\.1' line='127.0.0.1 localhost {{ server.hostname }}' owner=root group=root mode=0644
+  when: server.hostname is defined
