@@ -1,17 +1,17 @@
 ---
 - hosts: all
-  sudo: true
+  become: yes
   vars_files:
     - vars/all.yml
   roles:
     - server
     - server_host
     - nginx
-    - mysql
     - php
-    - xdebug
-    - composer
-#    - mongodb
-#    - redis
-#    - rabbitmq
-#    - elasticsearch
+    - {role: "mysql", when: mysql.install }
+    - {role: "xdebug", when: xdebug.install }
+    - {role: "composer", when: composer.install }
+    - {role: "mongodb", when: mongodb.install }
+    - {role: "redis", when: redis.install }
+    - {role: "rabbitmq", when: rabbitmq.install }
+    - {role: "elasticsearch", when: elasticsearch.install }

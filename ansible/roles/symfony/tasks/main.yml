@@ -11,21 +11,31 @@
   file: path={{symfony.tmp}} state=directory owner=www-data group=www-data mode=0777 recurse=yes
 
 - name: Composer install
+  become: yes
+  become_user: www-data
   shell: export {{symfony.env.cache}} && export {{symfony.env.logs}} && cd {{symfony.projectroot}} && if ! [ -d {{symfony.projectroot}}/vendor ]; then composer install --prefer-dist -n; fi
   when: symfony.composerinstall
 
 - name: Clear cache
+  become: yes
+  become_user: www-data
   shell: export {{symfony.env.cache}} && export {{symfony.env.logs}} && cd {{symfony.projectroot}} && php {{symfony.console_dest}} cache:clear --env=dev
   when: symfony.cacheclear
 
 - name: Run migrations
+  become: yes
+  become_user: www-data
   shell: export {{symfony.env.cache}} && export {{symfony.env.logs}} && cd {{symfony.projectroot}} && if grep -q "doctrine-migrations-bundle" composer.lock; then php {{symfony.console_dest}} doctrine:migrations:migrate -n; fi
   when: symfony.migrations
 
 - name: Install assets
+  become: yes
+  become_user: www-data
   shell: export {{symfony.env.cache}} && export {{symfony.env.logs}} && cd {{symfony.projectroot}} && php {{symfony.console_dest}} assets:install --symlink --env=dev
   when: symfony.assetsinstall
 
 - name: Dump assets
+  become: yes
+  become_user: www-data
   shell: export {{symfony.env.cache}} && export {{symfony.env.logs}} && cd {{symfony.projectroot}} && php {{symfony.console_dest}} assetic:dump --env=dev
   when: symfony.assetsdump

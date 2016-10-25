@@ -1,6 +1,5 @@
 ---
 server:
-    install: true
     timezone: 'UTC'
     locale: 'en_US.UTF-8'
     hostname: 'project_demo.vagrant'
@@ -11,38 +10,13 @@ server:
         - mc
         - htop
         - git
+
 nginx:
-    install: true
     docroot: '/var/www/project/web'
     index: 'app_dev.php'
     servername: 'project_demo.vagrant'
-mysql:
-    install: true
-    root_password: 'root'
-    database: 'project_demo'
-    user: 'project'
-    password: 'project'
-    dump: 'db.sql'
-    packages:
-        - mysql-server
-        - mysql-client
-        - python-mysqldb
-mongodb:
-    install: false
-redis:
-    install: false
-    port: 6379
-rabbitmq:
-    install: false
-    user: 'user'
-    password: 'password'
-    plugins: [rabbitmq_management]
-elasticsearch:
-    install: false
-    port: 9200
-    version: 1.5.2
+
 php:
-    install: true
     repo: 'ppa:ondrej/php'
     packages:
       - php7.0-dev
@@ -57,20 +31,23 @@ php:
       - php7.0-mbstring
       - php7.0-bcmath
       - php7.0-zip
+
 xdebug:
     install: true
     version: '2.4.1'
     dest: '2.4.1'
+
 composer:
-    install: true
+    install: false
+
 symfony:
-    projectroot: '/var/www/project'
     cacheclear: true
     assetsdump: true
     assetsinstall: true
     migrations: true
     moveparams: false
     composerinstall: false
+    projectroot: '/var/www/project'
     console_dest: 'bin/console'
     parameter_file: 'parameters.yml.vagrant.dist'
     tmp: '/tmp/project'
@@ -78,3 +55,33 @@ symfony:
         cache: 'SYMFONY__KERNEL__CACHE_DIR="/tmp/project/cache"'
         logs: 'SYMFONY__KERNEL__LOGS_DIR="/tmp/project/logs"'
     nginx_params: 'fastcgi_param SYMFONY__KERNEL__CACHE_DIR "/tmp/project/cache";fastcgi_param SYMFONY__KERNEL__LOGS_DIR "/tmp/project/logs";'
+
+mysql:
+    install: true
+    root_password: 'root'
+    database: 'project_demo'
+    user: 'project'
+    password: 'project'
+    dump: 'db.sql'
+    packages:
+        - mysql-server
+        - mysql-client
+        - python-mysqldb
+
+mongodb:
+    install: false
+
+redis:
+    install: false
+    port: 6379
+
+rabbitmq:
+    install: false
+    user: 'user'
+    password: 'password'
+    plugins: [rabbitmq_management]
+
+elasticsearch:
+    install: false
+    port: 9200
+    version: 1.5.2
