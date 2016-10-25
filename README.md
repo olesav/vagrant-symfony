@@ -2,14 +2,6 @@ Using vagrant with ansible and Symfony project
 =
 
 
-Project structure for this vagrant:
--
-
-    <root_folder>/project
-
-    <root_folder>/vagrant
-    
-
 Up Box
 -
 
